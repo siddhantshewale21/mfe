@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 const loginStyles = makeStyles((theme) => ({
   rootss:{
@@ -42,7 +42,7 @@ display:"none"
     background:
       "radial-gradient(50% 50% at 50% 50%, rgb(18, 38, 71) 0%, rgb(9, 14, 35) 100%)",
     "@media (max-width: 992px)": {
-      maxWidth: "100%",
+      maxWidth: "100% !important",
     },
   },
   layout: {

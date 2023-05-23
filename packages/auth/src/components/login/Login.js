@@ -1,42 +1,38 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  CssBaseline,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Grid,
-  Link,
-  Typography,
-} from "@material-ui/core";
+import React, { useState } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Copyright from "../copyright/Copyright";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import { Link, useHistory } from "react-router-dom";
+import {
+  ProceedLoginusingAPI,
+  validateEmail,
+  validateText,
+} from "./loginHelper";
 import Layout from "../layout/layout";
 import loginStyles from "./loginStyles";
-import loginForm from "./loginForm";
 
 export default function Login() {
   const classes = loginStyles();
   const history = useHistory();
-  const formik = loginForm({
-    submit: async (values, helpers) => {
-      try {
-        history.push("/dashboard");
-      } catch (err) {
-        console.log(err);
-      }
-    },
-  });
+  const [username, usernameupdate] = useState("");
+  const [password, passwordupdate] = useState("");
 
   return (
-    
     <div className={classes.container}>
-      <Container component="main" maxWidth="false" style={{ padding: "0 15%" }}>
-        <CssBaseline />
+      <Container
+        maxWidth="xs"
+        style={{
+          alignItems: "stretch",
+          maxWidth: "50% !important",
+          margin: "0px !important",
+        }}
+      >
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -45,28 +41,28 @@ export default function Login() {
             Sign in
           </Typography>
           <form
+            onSubmit={(e) => {
+              ProceedLoginusingAPI(e, username, password);
+            }}
             className={classes.form}
             noValidate
-            onSubmit={formik.handleSubmit}
           >
             <TextField
+              error={!validateEmail(username)}
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="User Name"
+              name="username"
+              autoComplete="username"
               autoFocus
-              type="email"
-              error={!!(formik.touched.email && formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.email}
+              value={username}
+              onChange={(e) => usernameupdate(e.target.value)}
             />
             <TextField
+              error={!validateText(password)}
               variant="outlined"
               margin="normal"
               required
@@ -76,11 +72,8 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
-              error={!!(formik.touched.password && formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.password}
+              value={password}
+              onChange={(e) => passwordupdate(e.target.value)}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -95,30 +88,25 @@ export default function Login() {
             >
               Sign In
             </Button>
-            {formik.errors.submit && (
-              <Typography color="error" sx={{ mt: 3 }} variant="body2">
-                {formik.errors.submit}
-              </Typography>
-            )}
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
-                <Link href="/auth/signup" variant="body2">
+                <Link to="/auth/signup">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </form>
         </div>
-        <Box mt={8}>
-          <Copyright />
-        </Box>
+        <div className={classes.leftside}></div>
       </Container>
-      <Container component="main" className={classes.layoutContainer}>
+      <Container
+        className={classes.layoutContainer}
+        style={{
+          alignItems: "stretch",
+          maxWidth: "50% !important",
+          margin: "0px !important",
+        }}
+      >
         <div className={classes.layout}>
           <Layout />
         </div>
