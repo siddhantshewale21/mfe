@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core/styles';
 
 import Signin from './components/login';
-import Signup from './components/Signup';
+import Signup from './components/signup';
 
 const generateClassName = createGenerateClassName({
   productionPrefix: 'au',
@@ -19,10 +19,11 @@ export default ({ history, onSignIn }) => {
         <Router history={history}>
           <Switch>
             <Route path="/auth/signin" component={Signin} />
+            <Route path="/auth/signup" component={Signup} />
            
-            <Route path="/auth/signup">
+            {/* <Route path="/auth/signup">
               <Signup onSignIn={onSignIn} />
-            </Route>
+            </Route> */}
           </Switch>
         </Router>
       </StylesProvider>
