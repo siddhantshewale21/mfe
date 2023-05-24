@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -9,12 +10,13 @@ import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import { Link, useHistory } from "react-router-dom";
 import { handlesubmit } from "./signUpHelper";
 import Layout from "../layout/layout";
 import signUpStyles from "./signUpStyles";
 import {
+  validateDate,
   validateEmail,
+  validatePassword,
   validatePhone,
   validateText,
 } from "../login/loginHelper";
@@ -30,21 +32,17 @@ function Copyright() {
 }
 
 export default function SignUp() {
-  // const classes = useStyles();
   const classes = signUpStyles();
   const [username, usernamechange] = useState("");
   const [firstname, firstnamechange] = useState("");
   const [lastname, lastnamechange] = useState("");
   const [password, passwordchange] = useState("");
   const [confirmpassword, confirmpasswordchange] = useState("");
+  const [isSubmit, setIsSubmit] = useState(false);
 
-  const systemDate = new Date().setHours(0, 0, 0, 0);
-  const minimumDate = new Date("01-01-1970").setHours(0, 0, 0, 0);
-  const date = new Date();
-  const month = Number(date.getMonth()) + 1;
-  const monthStr = month > 9 ? month.toString() : "0" + month.toString();
-  const dateStr = date.getFullYear() + "-" + monthStr + "-" + date.getDate();
-  const [dateOfBirth, dateOfBirthchange] = useState(dateStr);
+  const systemDate = new Date();
+  // const minimumDate = new Date("01-01-1970").setHours(0, 0, 0, 0);
+  const [dateOfBirth, dateOfBirthchange] = useState("");
   const [phoneNo, phoneNochange] = useState("");
   const usenavigate = useHistory();
 
@@ -60,6 +58,7 @@ export default function SignUp() {
           </Typography>
           <form
             onSubmit={(e) => {
+              setIsSubmit(true);
               handlesubmit(
                 e,
                 {
@@ -80,7 +79,7 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
-                  error={!validateText(firstname)}
+                  error={isSubmit && !validateText(firstname)}
                   autoComplete="firstname"
                   name="firstname"
                   variant="outlined"
@@ -95,7 +94,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
-                  error={!validateText(lastname)}
+                  error={isSubmit && !validateText(lastname)}
                   variant="outlined"
                   required
                   fullWidth
@@ -109,7 +108,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12} sm={12}>
                 <TextField
-                  error={!validateEmail(username)}
+                  error={isSubmit && !validateEmail(username)}
                   autoComplete="username"
                   name="username"
                   variant="outlined"
@@ -124,7 +123,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  error={!validatePhone(phoneNo)}
+                  error={isSubmit && !validatePhone(phoneNo)}
                   variant="outlined"
                   required
                   fullWidth
@@ -133,12 +132,15 @@ export default function SignUp() {
                   name="phoneNo"
                   autoComplete="phoneNo"
                   value={phoneNo}
-                  onChange={(e) => phoneNochange(e.target.value)}
+                  onChange={(e) => {
+                    let num = e.target.value.replace(".", "");
+                    !isNaN(num) && phoneNochange(num);
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  error={!dateOfBirth}
+                  error={isSubmit && !validateDate(dateOfBirth)}
                   variant="outlined"
                   fullWidth
                   id="dateOfBirth"
@@ -152,7 +154,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  error={!validateText(password)}
+                  error={isSubmit && !validatePassword(password)}
                   variant="outlined"
                   required
                   fullWidth
@@ -167,7 +169,11 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  error={!validateText(confirmpassword)}
+                  error={
+                    isSubmit &&
+                    confirmpassword !== password &&
+                    !validatePassword(confirmpassword)
+                  }
                   variant="outlined"
                   required
                   fullWidth
