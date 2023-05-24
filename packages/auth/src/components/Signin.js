@@ -132,7 +132,7 @@ export default function SignIn() {
                 {formik.errors.submit}
               </Typography>
             )}
-            <Grid container>
+            <Grid container style={{ marginTop: "2%" }}>
               <Grid item>
                 <Link to="/auth/signup">
                   {"Don't have an account? Sign Up"}

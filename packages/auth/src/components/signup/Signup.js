@@ -44,6 +44,7 @@ export default function SignUp() {
                   variant="outlined"
                   required
                   fullWidth
+                  autoFocus
                   id="firstName"
                   label="First Name"
                   error={
