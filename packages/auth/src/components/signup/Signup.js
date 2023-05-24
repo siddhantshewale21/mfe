@@ -17,7 +17,7 @@ export default function SignUp() {
   const usenavigate = useHistory();
   const formik = signupForm({
     submit: async (values) => {
-      formik.isValid && handlesubmit(values);
+      formik.isValid && handlesubmit(values, usenavigate);
     },
   });
 
