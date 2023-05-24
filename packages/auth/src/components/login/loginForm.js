@@ -9,7 +9,7 @@ const loginForm = (props) => {
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .required("Email is required")
+        .required("Username is required")
         .max(255)
         .email("Must be a valid email"),
       password: Yup.string()

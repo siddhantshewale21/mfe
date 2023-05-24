@@ -3,10 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -21,30 +18,23 @@ import {
   validateText,
 } from "../login/loginHelper";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link to="/">Your Website</Link> {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 export default function SignUp() {
   const classes = signUpStyles();
-  const [username, usernamechange] = useState("");
-  const [firstname, firstnamechange] = useState("");
-  const [lastname, lastnamechange] = useState("");
-  const [password, passwordchange] = useState("");
-  const [confirmpassword, confirmpasswordchange] = useState("");
-  const [isSubmit, setIsSubmit] = useState(false);
-
-  const systemDate = new Date();
-  // const minimumDate = new Date("01-01-1970").setHours(0, 0, 0, 0);
-  const [dateOfBirth, dateOfBirthchange] = useState("");
-  const [phoneNo, phoneNochange] = useState("");
   const usenavigate = useHistory();
+  // const [username, usernamechange] = useState("");
+  // const [firstname, firstnamechange] = useState("");
+  // const [lastname, lastnamechange] = useState("");
+  // const [password, passwordchange] = useState("");
+  // const [confirmpassword, confirmpasswordchange] = useState("");
+  // const [dateOfBirth, dateOfBirthchange] = useState("");
+  // const [phoneNo, phoneNochange] = useState("");
+  const formik = loginForm({
+    submit: async (values) => {
+      proceedLoginusingAPI(values);
+    },
+  });
+  // const systemDate = new Date();
+  // const minimumDate = new Date("01-01-1970").setHours(0, 0, 0, 0);
 
   return (
     <div className={classes.container}>
@@ -57,29 +47,29 @@ export default function SignUp() {
             Sign up
           </Typography>
           <form
-            onSubmit={(e) => {
-              setIsSubmit(true);
-              handlesubmit(
-                e,
-                {
-                  firstname,
-                  lastname,
-                  username,
-                  phoneNo,
-                  dateOfBirth,
-                  password,
-                  confirmpassword,
-                },
-                usenavigate
-              );
-            }}
+            onSubmit={formik.handleSubmit}
+            // onSubmit={(e) => {
+            //   setIsSubmit(true);
+            //   handlesubmit(
+            //     e,
+            //     {
+            //       firstname,
+            //       lastname,
+            //       username,
+            //       phoneNo,
+            //       dateOfBirth,
+            //       password,
+            //       confirmpassword,
+            //     },
+            //     usenavigate
+            //   );
+            // }}
             className={classes.form}
             noValidate
           >
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
-                  error={isSubmit && !validateText(firstname)}
                   autoComplete="firstname"
                   name="firstname"
                   variant="outlined"
@@ -88,13 +78,15 @@ export default function SignUp() {
                   id="firstname"
                   label="First Name"
                   autoFocus
-                  value={firstname}
-                  onChange={(e) => firstnamechange(e.target.value)}
+                  error={!!(formik.touched.firstname && formik.errors.firstname)}
+                  helperText={formik.touched.firstname && formik.errors.firstname}
+                  value={formik.values.firstname}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
-                  error={isSubmit && !validateText(lastname)}
                   variant="outlined"
                   required
                   fullWidth
@@ -102,13 +94,15 @@ export default function SignUp() {
                   label="Last Name"
                   name="lastname"
                   autoComplete="lastName"
-                  value={lastname}
-                  onChange={(e) => lastnamechange(e.target.value)}
+                  error={!!(formik.touched.lastname && formik.errors.lastname)}
+                  helperText={formik.touched.lastname && formik.errors.lastname}
+                  value={formik.values.lastname}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
                 <TextField
-                  error={isSubmit && !validateEmail(username)}
                   autoComplete="username"
                   name="username"
                   variant="outlined"
@@ -116,14 +110,15 @@ export default function SignUp() {
                   fullWidth
                   id="username"
                   label="Email Address"
-                  autoFocus
-                  value={username}
-                  onChange={(e) => usernamechange(e.target.value)}
+                  error={!!(formik.touched.username && formik.errors.username)}
+                  helperText={formik.touched.username && formik.errors.username}
+                  value={formik.values.username}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  error={isSubmit && !validatePhone(phoneNo)}
                   variant="outlined"
                   required
                   fullWidth
@@ -131,16 +126,19 @@ export default function SignUp() {
                   label="Phone No"
                   name="phoneNo"
                   autoComplete="phoneNo"
-                  value={phoneNo}
-                  onChange={(e) => {
-                    let num = e.target.value.replace(".", "");
-                    !isNaN(num) && phoneNochange(num);
-                  }}
+                  // onChange={(e) => {
+                  //   let num = e.target.value.replace(".", "");
+                  //   !isNaN(num) && phoneNochange(num);
+                  // }}
+                  error={!!(formik.touched.phoneNo && formik.errors.phoneNo)}
+                  helperText={formik.touched.phoneNo && formik.errors.phoneNo}
+                  value={formik.values.phoneNo}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  error={isSubmit && !validateDate(dateOfBirth)}
                   variant="outlined"
                   fullWidth
                   id="dateOfBirth"
@@ -148,13 +146,15 @@ export default function SignUp() {
                   name="dateOfBirth"
                   type="date"
                   autoComplete="dateOfBirth"
-                  value={dateOfBirth}
-                  onChange={(e) => dateOfBirthchange(e.target.value)}
+                  error={!!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)}
+                  helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
+                  value={formik.values.dateOfBirth}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  error={isSubmit && !validatePassword(password)}
                   variant="outlined"
                   required
                   fullWidth
@@ -163,17 +163,15 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => passwordchange(e.target.value)}
+                  error={!!(formik.touched.password && formik.errors.password)}
+                  helperText={formik.touched.password && formik.errors.password}
+                  value={formik.values.password}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  error={
-                    isSubmit &&
-                    confirmpassword !== password &&
-                    !validatePassword(confirmpassword)
-                  }
                   variant="outlined"
                   required
                   fullWidth
@@ -181,16 +179,11 @@ export default function SignUp() {
                   label="Confirm Password"
                   type="password"
                   id="confirmpassword"
-                  value={confirmpassword}
-                  onChange={(e) => confirmpasswordchange(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+                  error={!!(formik.touched.confirmPassword && formik.errors.confirmPassword)}
+                  helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                  value={formik.values.confirmPassword}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
                 />
               </Grid>
             </Grid>
@@ -210,9 +203,6 @@ export default function SignUp() {
             </Grid>
           </form>
         </div>
-        <Box mt={5}>
-          <Copyright />
-        </Box>
       </Container>
       <Container
         className={classes.layoutContainer}
