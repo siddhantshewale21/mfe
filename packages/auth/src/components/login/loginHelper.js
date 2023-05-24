@@ -43,7 +43,7 @@ export const ProceedLoginusingAPI = (e, username, password) => {
       role: "Admin",
     };
     fetch("https://localhost:7007/api/Users/Authenticate", {
-      method: "POST",
+      method: "POST", 
       headers: { "content-type": "application/json" },
       body: JSON.stringify(inputobj),
     })
