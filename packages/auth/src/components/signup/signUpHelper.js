@@ -57,61 +57,43 @@ export const IsValidate = ({
   }
 };
 
-export const handlesubmit = async (
-  e,
-  { firstname, lastname, username, password, phoneNo, dateOfBirth },
-  usenavigate
-) => {
-  e.preventDefault();
-  if (
-    IsValidate({
-      firstname,
-      lastname,
-      username,
-      phoneNo,
-      dateOfBirth,
-      password,
-      confirmpassword,
-    })
-  ) {
-    let user = {
-      id: 0,
-      firstName: firstname,
-      lastName: lastname,
-      role: "admin",
-      email: username,
-      password: password,
-      phoneNumber: Number(phoneNo),
-      //dateOfBirth: dateOfBirth,
-      dateOfBirth: "2023-05-23T10:26:17.545Z",
-    };
+export const handlesubmit = async (values) => {
+  let user = {
+    id: 0,
+    firstName: values.firstName,
+    lastName: values.lastName,
+    role: "A",
+    email: values.userName,
+    password: values.password,
+    phoneNumber: Number(values.phoneNo),
+    dateOfBirth: values.dateOfBirth,
+  };
 
-    createUser(user)
-      .then((res) => {
-        console.log(res);
-        if (res && res.code === 200) {
-          alert("Registered successfully.");
-          // toast.success("Registered successfully.");
-          usenavigate.push("/auth/signin");
-        } else if (res && res.code === 406) {
-          alert("Failed :" + res.message);
-          // toast.success("Registered successfully.");
-        } else {
-          alert("Failed :" + err.title);
-          // toast.error("Failed :" + err.title);
-        }
-        //navigate('/login');
-      })
-      .catch((err) => {
-        if (err && err.code === 406) {
-          alert("Failed :" + err.message);
-          // toast.success("Registered successfully.");
-        } else {
-          alert("Failed :" + err.title);
-        }
-        // toast.error("Failed :" + err.message);
-      });
-  }
+  createUser(user)
+    .then((res) => {
+      console.log(res);
+      if (res && res.code === 200) {
+        alert("Registered successfully.");
+        // toast.success("Registered successfully.");
+        usenavigate.push("/auth/signin");
+      } else if (res && res.code === 406) {
+        alert("Failed :" + res.message);
+        // toast.success("Registered successfully.");
+      } else {
+        alert("Failed :" + err.title);
+        // toast.error("Failed :" + err.title);
+      }
+      //navigate('/login');
+    })
+    .catch((err) => {
+      if (err && err.code === 406) {
+        alert("Failed :" + err.message);
+        // toast.success("Registered successfully.");
+      } else {
+        alert("Failed :" + err.title);
+      }
+      // toast.error("Failed :" + err.message);
+    });
 };
 
 // const ProceedLoginusingAPI = (e) => {

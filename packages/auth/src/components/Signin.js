@@ -20,43 +20,41 @@ export default function SignIn() {
   const [printMessesesupdated, setPrintMessesesupdated] = useState("");
   const formik = loginForm({
     submit: async (values) => {
-      proceedLoginusingAPI(values);
+      formik.isValid && proceedLoginusingAPI(values);
     },
   });
 
   const proceedLoginusingAPI = (values) => {
-    if (formik.isValid) {
-      let inputobj = {
-        email: values.username,
-        password: values.password,
-      };
-      fetch("https://localhost:7007/api/Users/Authenticate", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(inputobj),
-      })
-        .then((res) => {
-          if (res.status === 200) {
-            toast.success("Success");
-            messesesupdate("success");
-            usenavigate.push("/dashboard");
-          } else {
-            messesesupdate("error");
-          }
-          return res.json();
-        })
-        .then((resp) => {
-          sessionStorage.setItem("username", values.username);
-          sessionStorage.setItem("jwttoken", resp.jwtToken);
-          sessionStorage.setItem("statusCode", resp.message);
-          setPrintMessesesupdated(resp.message);
-        })
-        .catch((err) => {
+    let inputobj = {
+      email: values.username,
+      password: values.password,
+    };
+    fetch("https://localhost:7007/api/Users/Authenticate", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(inputobj),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success("Success");
+          messesesupdate("success");
+          usenavigate.push("/dashboard");
+        } else {
           messesesupdate("error");
-          toast.error("Login Failed due to :" + err.message);
-          usenavigate.push("/auth/signin");
-        });
-    }
+        }
+        return res.json();
+      })
+      .then((resp) => {
+        sessionStorage.setItem("username", values.username);
+        sessionStorage.setItem("jwttoken", resp.jwtToken);
+        sessionStorage.setItem("statusCode", resp.message);
+        setPrintMessesesupdated(resp.message);
+      })
+      .catch((err) => {
+        messesesupdate("error");
+        toast.error("Login Failed due to :" + err.message);
+        usenavigate.push("/auth/signin");
+      });
   };
 
   return (
