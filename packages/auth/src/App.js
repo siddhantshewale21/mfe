@@ -7,6 +7,8 @@ import {
 
 import Signin from './components/Signin';
 import Signup from './components/Signup';
+import ForgotPassword from './components/forgot-password/ForgotPassword';
+import RecoverPassword from './components/recover-password/RecoverPassword';
 
 const generateClassName = createGenerateClassName({
   productionPrefix: 'au',
@@ -23,6 +25,8 @@ export default ({ history, onSignIn }) => {
             <Route path="/auth/signup">
               <Signup onSignIn={onSignIn} />
             </Route>
+            <Route path="/auth/forgot-password" component={ForgotPassword}/>
+            <Route path="/auth/recover-password" component={RecoverPassword}/> 
           </Switch>
         </Router>
       </StylesProvider>
