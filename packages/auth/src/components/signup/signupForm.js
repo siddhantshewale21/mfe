@@ -3,23 +3,17 @@ import * as Yup from "yup";
 
 export const yesterdaysDate = () => {
   const date = new Date();
-  const year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-  if (day === 1) {
-    month = month - 1;
-  } else {
-    day = day - 1;
-  }
+  const yesterday = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0, 0);
+
+  const month = yesterday.getMonth() + 1;
   const monthStr = month > 9 ? month : "0" + month;
-  const yesterday = year + "-" + monthStr + "-" + day;
-  // const todaysDate = new Date(year, month, day, 0, 0, 0, 0);
-  return yesterday;
+  const yesterdayStr = yesterday.getFullYear() + "-" + monthStr + "-" + yesterday.getDate();
+
+  return yesterdayStr;
 };
 
 const signupForm = (props) => {
-  const passwordRegExp =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}/;
+  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}/;
 
   const formik = useFormik({
     initialValues: {
