@@ -11,7 +11,7 @@ import { Alert, AlertTitle } from "@material-ui/lab";
 import { handlesubmit } from "./signUpHelper";
 import Layout from "../layout/layout";
 import signUpStyles from "./signUpStyles";
-import signupForm from "./signupForm";
+import signupForm, { yesterdaysDate } from "./signupForm";
 
 export default function SignUp() {
   const classes = signUpStyles();
@@ -128,6 +128,10 @@ export default function SignUp() {
                   name="dateOfBirth"
                   type="date"
                   autoComplete="dateOfBirth"
+                  label="Date Of Birth"
+                  className={classes.textField}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{ inputProps: { max: yesterdaysDate() } }}
                   error={
                     !!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)
                   }
