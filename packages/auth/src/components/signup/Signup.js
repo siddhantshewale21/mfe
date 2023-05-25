@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import { Alert, AlertTitle } from "@material-ui/lab";
 import { handlesubmit } from "./signUpHelper";
 import Layout from "../layout/layout";
 import signUpStyles from "./signUpStyles";
@@ -15,15 +16,24 @@ import signupForm from "./signupForm";
 export default function SignUp() {
   const classes = signUpStyles();
   const usenavigate = useHistory();
+  const [messageTitle, setMessageTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const capitalizeFirstLetter = (value) =>
+    value.charAt(0).toUpperCase() + value.slice(1);
   const formik = signupForm({
     submit: async (values) => {
-      formik.isValid && handlesubmit(values, usenavigate);
+      formik.isValid &&
+        handlesubmit(values, usenavigate, setMessage, setMessageTitle);
     },
   });
 
   return (
     <div className={classes.container}>
       <Container component="main" maxWidth="xs">
+        <Alert severity={messageTitle} style={{ marginTop: "20px" }}>
+          <AlertTitle>{capitalizeFirstLetter(messageTitle)}</AlertTitle>
+          {message}
+        </Alert>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />

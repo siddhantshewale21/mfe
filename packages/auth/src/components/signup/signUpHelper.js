@@ -57,7 +57,12 @@ export const IsValidate = ({
   }
 };
 
-export const handlesubmit = async (values, usenavigate) => {
+export const handlesubmit = async (
+  values,
+  usenavigate,
+  setMessage,
+  setMessageTitle
+) => {
   let user = {
     id: 0,
     firstName: values.firstName,
@@ -65,7 +70,7 @@ export const handlesubmit = async (values, usenavigate) => {
     role: "A",
     email: values.userName,
     password: values.password,
-    phoneNumber: Number(values.phoneNo),
+    phoneNumber: values.phoneNo,
     dateOfBirth: values.dateOfBirth,
   };
 
@@ -73,26 +78,25 @@ export const handlesubmit = async (values, usenavigate) => {
     .then((res) => {
       console.log(res);
       if (res && res.code === 200) {
-        alert("Registered successfully.");
-        // toast.success("Registered successfully.");
+        setMessageTitle("success");
+        setMessage(res.message);
         usenavigate.push("/auth/signin");
       } else if (res && res.code === 406) {
-        alert("Failed :" + res.message);
-        // toast.success("Registered successfully.");
+        setMessageTitle("error");
+        setMessage(res.message);
       } else {
-        alert("Failed :" + err.title);
-        // toast.error("Failed :" + err.title);
+        setMessageTitle("error");
+        setMessage(res.message);
       }
-      //navigate('/login');
     })
     .catch((err) => {
       if (err && err.code === 406) {
-        alert("Failed :" + err.message);
-        // toast.success("Registered successfully.");
+        setMessageTitle("error");
+        setMessage(err.message);
       } else {
-        alert("Failed :" + err.title);
+        setMessageTitle("error");
+        setMessage(err.title || err.message);
       }
-      // toast.error("Failed :" + err.message);
     });
 };
 
