@@ -51,7 +51,7 @@ const signupForm = (props) => {
         .max(yesterdaysDate, "Must be less than today's date."),
       phoneNo: Yup.string()
         .required("Phone number is required.")
-        .matches(phoneRegExp, "Must be a valid phone number."),
+        .length(10, "Must be a valid phone number of 10 digits."),
     }),
     onSubmit: async (values) => {
       props.submit(values);
