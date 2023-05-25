@@ -2,7 +2,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const signupForm = (props) => {
-  const phoneRegExp = /^[1-9]{1}[0-9]{9}$/;
   const passwordRegExp =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}/;
   const date = new Date();
