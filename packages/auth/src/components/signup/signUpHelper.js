@@ -67,7 +67,7 @@ export const handlesubmit = async (
     id: 0,
     firstName: values.firstName,
     lastName: values.lastName,
-    role: "A",
+    role: values.role,
     email: values.userName,
     password: values.password,
     phoneNumber: values.phoneNo,

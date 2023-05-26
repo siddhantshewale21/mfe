@@ -12,6 +12,7 @@ import { handlesubmit } from "./signUpHelper";
 import Layout from "../layout/layout";
 import signUpStyles from "./signUpStyles";
 import signupForm from "./signupForm";
+import {  Select, MenuItem, FormControl, InputLabel } from '@material-ui/core';
 
 export default function SignUp() {
   const classes = signUpStyles();
@@ -28,7 +29,36 @@ export default function SignUp() {
         handlesubmit(values, usenavigate, setMessage, setMessageTitle);
     },
   });
+  
+  const validateDateOfBirth = (date) => {
+    const currentDate = new Date();
+    const selectedDate = new Date(date);
+    const minDate = new Date();
+    minDate.setFullYear(currentDate.getFullYear() - 18);
+    if (selectedDate >= currentDate) {
+      return false;
+    }
+    // Check if the selected date is less than the minimum age date (18 years)
+    if (selectedDate > minDate) {
+      return false;
+    }
+    return true;
+  };
 
+  const handleDateChange = (e) => {
+    const { value } = e.target;
+    formik.handleChange(e);
+    const isValid = validateDateOfBirth(value);
+    if (!isValid) {
+      formik.setFieldError(
+        "dateOfBirth",
+        "Invalid date of birth. You must be at least 18 years old."
+      );
+    } else {
+      formik.setFieldError("dateOfBirth", "");
+    }
+  };
+  
   return (
     <div className={classes.container}>
       <Container component="main" maxWidth="xs">
@@ -102,6 +132,27 @@ export default function SignUp() {
                   onChange={formik.handleChange}
                 />
               </Grid>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  autoComplete="role"
+                  name="role"
+                  id="role"
+                  select
+                  label="Role"
+                  value={formik.values.role}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={!!(formik.touched.role && formik.errors.role)}
+                  helperText={formik.touched.role && formik.errors.role}
+                  fullWidth
+                  variant="outlined"
+                  required
+                >
+                  <MenuItem value="">Select a role</MenuItem>
+                  <MenuItem value="Admin">Admin</MenuItem>
+                  <MenuItem value="User">User</MenuItem>
+                </TextField>
+              </Grid>
               <Grid item xs={12} md={6}>
               <TextField
                   variant="outlined"
@@ -121,23 +172,29 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  id="dateOfBirth"
-                  name="dateOfBirth"
-                  type="date"
-                  autoComplete="dateOfBirth"
-                  error={
-                    !!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)
-                  }
-                  helperText={
-                    formik.touched.dateOfBirth && formik.errors.dateOfBirth
-                  }
-                  value={formik.values.dateOfBirth}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                />
+              <TextField
+                variant="outlined"
+                fullWidth
+                id="dateOfBirth"
+                name="dateOfBirth"
+                type="date"
+                label="Date of Birth"
+                error={
+                  !!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)
+                }
+                helperText={
+                  formik.touched.dateOfBirth && formik.errors.dateOfBirth
+                }
+                value={formik.values.dateOfBirth}
+                onBlur={formik.handleBlur}
+                onChange={handleDateChange} // Use the custom handler to validate the date
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  max: new Date().toISOString().split("T")[0], // Disable current and future dates
+                }}
+             />
               </Grid>
               <Grid item xs={12}>
                 <TextField
