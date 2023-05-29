@@ -11,7 +11,7 @@ import { Alert, AlertTitle } from "@material-ui/lab";
 import { handlesubmit, yesterdaysDate } from "./signUpHelper";
 import Layout from "../layout/layout";
 import signUpStyles from "./signUpStyles";
-import signupForm from "./signupForm";
+import signupForm, { yesterdaysDate } from "./signupForm";
 
 export default function SignUp() {
   const classes = signUpStyles();
@@ -103,7 +103,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-              <TextField
+                <TextField
                   variant="outlined"
                   required
                   fullWidth

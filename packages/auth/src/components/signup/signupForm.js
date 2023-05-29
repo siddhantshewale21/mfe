@@ -1,14 +1,19 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const signupForm = (props) => {
-  const passwordRegExp =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}/;
+export const yesterdaysDate = () => {
   const date = new Date();
-  const day = date.getDate();
-  const month = date.getMonth();
-  const year = date.getFullYear();
-  const yesterdaysDate = new Date(year, month, day - 1, 0, 0, 0, 0);
+  const yesterday = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0, 0);
+
+  const month = yesterday.getMonth() + 1;
+  const monthStr = month > 9 ? month : "0" + month;
+  const yesterdayStr = yesterday.getFullYear() + "-" + monthStr + "-" + yesterday.getDate();
+
+  return yesterdayStr;
+};
+
+const signupForm = (props) => {
+  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}/;
 
   const formik = useFormik({
     initialValues: {
@@ -47,7 +52,7 @@ const signupForm = (props) => {
         ),
       dateOfBirth: Yup.date()
         .required("Date Of Birth is required.")
-        .max(yesterdaysDate, "Must be less than today's date."),
+        .max(yesterdaysDate(), "Must be less than today's date."),
       phoneNo: Yup.string()
         .required("Phone number is required.")
         .length(10, "Must be a valid phone number of 10 digits."),
