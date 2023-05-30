@@ -1,25 +1,17 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
-export const yesterdaysDate = () => {
-  const date = new Date();
-  const yesterday = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0, 0);
-
-  const month = yesterday.getMonth() + 1;
-  const monthStr = month > 9 ? month : "0" + month;
-  const yesterdayStr = yesterday.getFullYear() + "-" + monthStr + "-" + yesterday.getDate();
-
-  return yesterdayStr;
-};
+import { yesterdaysDate } from "./signUpHelper";
 
 const signupForm = (props) => {
-  const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}/;
+  const passwordRegExp =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}/;
 
   const formik = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
       userName: "",
+      role: "",
       password: "",
       confirmPassword: "",
       dateOfBirth: "",
@@ -32,6 +24,7 @@ const signupForm = (props) => {
         .required("Username is required.")
         .max(255)
         .email("Must be a valid email."),
+      role: Yup.string().required("Role is required."),
       password: Yup.string()
         .required("Password is required.")
         .max(255)
