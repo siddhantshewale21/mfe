@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { createUser } from "../../../services/user.service";
+import { signup } from "../../../services/user.service";
 
 export const capitalizeFirstLetter = (value) =>
   value.charAt(0).toUpperCase() + value.slice(1);
@@ -88,7 +88,7 @@ export const handlesubmit = async (
   setAlertType,
   setShowAlert
 ) => {
-  createUser({
+  signup({
     id: 0,
     firstName: values.firstName,
     lastName: values.lastName,
@@ -99,7 +99,7 @@ export const handlesubmit = async (
     dateOfBirth: values.dateOfBirth,
   })
     .then((res) => {
-      if (res && res.code === 200) {
+      if (res && res.status === 200) {
         setAlertType("success");
         setShowAlert(true);
         setAlert(res.data.message || "Signed up successfully.");
@@ -113,7 +113,7 @@ export const handlesubmit = async (
     .catch((err) => {
       setAlertType("error");
       setShowAlert(true);
-      setAlert(res.data.message || "Signed up failed.");
+      setAlert(err.response.data.message || "Signed up failed.");
       usenavigate.push("/auth/signup");
     });
 };

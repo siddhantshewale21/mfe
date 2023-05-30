@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { authenticateUser } from "../../../services/user.service";
+import { signin } from "../../../services/user.service";
 
 export const validateText = (value) => {
   return value && value.length > 0 && value.length < 250;
@@ -58,7 +58,7 @@ export const proceedLoginusingAPI = (
   setAlertType,
   setShowAlert
 ) => {
-  authenticateUser({
+  signin({
     email: values.username,
     password: values.password,
   })
@@ -80,7 +80,7 @@ export const proceedLoginusingAPI = (
     .catch((err) => {
       setAlertType("error");
       setShowAlert(true);
-      setAlert(err.message);
+      setAlert(err.response.data.message);
       usenavigate.push("/auth/signin");
     });
 };

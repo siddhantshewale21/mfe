@@ -9,11 +9,11 @@ const loginForm = (props) => {
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .required("Username is required")
+        .required("Username is required.")
         .max(255)
-        .email("Must be a valid email"),
+        .email("Must be a valid email."),
       password: Yup.string()
-        .required("Password is required")
+        .required("Password is required.")
         .max(255)
         .matches(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}/,
