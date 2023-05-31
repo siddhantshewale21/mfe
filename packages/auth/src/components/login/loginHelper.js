@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
-import { signin } from "../../../services/user.service";
-
+import { signin } from "../../../../container/src/services/user.service.js";
+// import { signin } from "container/ContainerApp"
 export const validateText = (value) => {
   return value && value.length > 0 && value.length < 250;
 };
