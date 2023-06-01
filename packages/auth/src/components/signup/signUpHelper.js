@@ -61,8 +61,11 @@ export const handlesubmit = async (
   values,
   usenavigate,
   setMessage,
-  setMessageTitle
+  setMessageTitle,
+
+  
 ) => {
+  
   let user = {
     id: 0,
     firstName: values.firstName,
@@ -100,35 +103,3 @@ export const handlesubmit = async (
     });
 };
 
-// const ProceedLoginusingAPI = (e) => {
-//         e.preventDefault();
-//         if (validate()) {
-//             ///implentation
-//             // console.log('proceed');
-//             let inputobj={
-//               "username": username,
-//               "password": password,
-//               "role":"Admin"
-//           };
-//             fetch("https://localhost:7007/api/Users",{
-//                 method:'POST',
-//                 headers:{'content-type':'application/json'},
-//                 body:JSON.stringify(inputobj)
-//             }).then((res) => {
-//                 return res.json();
-//             }).then((resp) => {
-//               if (Object.keys(resp).length === 0) {
-//                 toast.error('Login failed, invalid credentials');
-//             }else{
-//                  toast.success('Success');
-//                  sessionStorage.setItem('username',username);
-//                  sessionStorage.setItem('jwttoken',resp.jwtToken);
-// if(toast.success('Success')){
-//   usenavigate.push('/dashboard')
-// }else{
-//   usenavigate.push('/auth/signin')
-// }
-//                  }
-//               });
-//             };
-//           };
