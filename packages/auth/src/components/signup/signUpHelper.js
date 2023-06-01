@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { signup } from "../../../services/user.service";
+import { signup } from "../../../../container/src/services/user.service";
 
 export const capitalizeFirstLetter = (value) =>
   value.charAt(0).toUpperCase() + value.slice(1);
