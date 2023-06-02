@@ -2,7 +2,7 @@ import {
   ApiConstants as constant,
   ApiEndpoints as endpoint,
 } from "./api.constant";
-import { callApi, post } from "./api.service";
+import { callApi, get, post } from "./api.service";
 
 export const signin = async (user) => {
   return await post({
@@ -15,5 +15,11 @@ export const signup = async (user) => {
   return await post({
     url: endpoint.user.create,
     body: JSON.stringify(user),
+  });
+};
+
+export const getAllUsers = async () => {
+  return await get({
+    url: endpoint.user.getAll,
   });
 };

@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import clsx from 'clsx';
-import Container from '@material-ui/core/Container';
-import ChartTwo from './ChartTwo';
-import Orders from './Orders';
-import DrawerMenu from './DrawerMenu';
-import {useStyles} from "./Styles"
+import React, { useState, useEffect } from "react";
+import clsx from "clsx";
+import Container from "@material-ui/core/Container";
+import ChartTwo from "./ChartTwo";
+import Orders from "./Orders";
+import DrawerMenu from "./DrawerMenu";
+import { useStyles } from "./Styles";
 import {
   TextField,
   Grid,
@@ -17,42 +17,124 @@ import {
   CardHeader,
   Divider,
 } from "@material-ui/core";
-
-
+import { get } from "../../../container/src/services/api.service";
+import { getAllUsers } from "../../../container/src/services/user.service";
+import GridView from "./grid/GridView";
 
 export default function Profile(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const url = "https://localhost:7007/api/Users/"+sessionStorage.getItem("username");
+  const url =
+    "https://localhost:7007/api/Users/" + sessionStorage.getItem("username");
   const [data, setData] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const fetchInfo = () => {
-    return fetch(url,{
-      headers: { "Authorization": 'Bearer '+sessionStorage.getItem("jwttoken")
-    }
+    return fetch(url, {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("jwttoken"),
+      },
     })
       .then((res) => res.json())
-      .then((d) => setData(d))
-  }
+      .then((d) => setData(d));
+  };
+
   useEffect(() => {
     fetchInfo();
+    getAllUsers()
+      .then((res) => {
+        setUsers(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
-  console.log("data=====", Array(data))
+  console.log("data=====", Array(data));
   sessionStorage.setItem("fullnameUser", data.firstName + " " + data.lastName);
   const [values, setValues] = useState({
-    password: '',
-    confirm: ''
+    password: "",
+    confirm: "",
   });
 
   const handleChange = (event) => {
     setValues({
       ...values,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
+
+  const getFormattedDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const monthName = monthNames[monthIndex];
+    const year = date.getFullYear();
+    return `${day}-${monthName}-${year}`;
+  };
+
+  const columns = [
+    { field: "id", headerName: "Id", width: 100 },
+    {
+      field: "fullName",
+      headerName: "Full Name",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 200,
+      valueGetter: (params) =>
+        `${params.getValue(params.id, "firstName") || ""} ${
+          params.getValue(params.id, "lastName") || ""
+        }`,
+    },
+    {
+      field: "email",
+      headerName: "Username",
+      width: 250,
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      width: 120,
+    },
+    {
+      field: "phoneNumber",
+      headerName: "Phone Number",
+      width: 200,
+    },
+    {
+      field: "dateOfBirth",
+      headerName: "Date Of Birth",
+      width: 200,
+      valueGetter: (params) => getFormattedDate(params.value),
+    },
+    {
+      field: "isActive",
+      headerName: "Active",
+      width: 200,
+      valueGetter: (params) =>
+        params.getValue(params.id, "email") ===
+        sessionStorage.getItem("username")
+          ? "Yes"
+          : "No",
+    },
+  ];
+
   return (
     <div className={classes.root}>
-     <DrawerMenu />
+      <DrawerMenu />
       <Container maxWidth="xxl" className={classes.content}>
         <div className={classes.appBarSpacer} />
         {/*<Paper className={classes.paper}>
@@ -66,12 +148,9 @@ export default function Profile(props) {
         <Container maxWidth="xxl" className={classes.content}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={6}>
-              <form {...props} >
-                <Card >
-                  <CardHeader
-                    subheader="Update password"
-                    title="Password"
-                  />
+              <form {...props}>
+                <Card>
+                  <CardHeader subheader="Update password" title="Password" />
                   <Divider />
                   <CardContent>
                     <TextField
@@ -98,59 +177,99 @@ export default function Profile(props) {
                   <Divider />
                   <Box
                     sx={{
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      p: 2
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      p: 2,
                     }}
                   >
-                    <Button
-                      color="primary"
-                      variant="contained"
-                    >
+                    <Button color="primary" variant="contained">
                       Update
                     </Button>
                   </Box>
                 </Card>
               </form>
             </Grid>
-            <Grid item xs={12} md={6} lg={6} container className={classes.paper}>
-            <Paper className={classes.paper} style={{minHeight:"350px"}}>
-          {Array(data) !== null && Array(data).map((types, i) => (<Grid item container direction="column" align="start" spacing={1} key={types.id}>
-            <Typography gutterBottom variant="h6" key={types.firstName+i}>
-              {types.firstName + " " + types.lastName}
-            </Typography>
-            
-            <Typography variant="body1" gutterBottom color="textSecondary" key={types.phoneNumber+i}>
-              Phone Number: {types.phoneNumber}
-            </Typography>
-            <Typography variant="body1" gutterBottom color="textSecondary" key={types.dateOfBirth+i}>
-              Date Of Birth: {types.dateOfBirth}
-            </Typography>
-              <Typography variant="body2" color="textSecondary" key={types.role+i}>
-                Role: {types.role}
-              </Typography>
-           
-            <Typography variant="body2" color="textSecondary" key={types.email+i}>
-              Email: {types.email}
-            </Typography>
-          </Grid>
-          ))}
-           </Paper>
-        </Grid>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              lg={6}
+              container
+              className={classes.paper}
+            >
+              <Paper className={classes.paper} style={{ minHeight: "350px" }}>
+                {Array(data) !== null &&
+                  Array(data).map((types, i) => (
+                    <Grid
+                      item
+                      container
+                      direction="column"
+                      align="start"
+                      spacing={1}
+                      key={types.id}
+                    >
+                      <Typography
+                        gutterBottom
+                        variant="h6"
+                        key={types.firstName + i}
+                      >
+                        {types.firstName + " " + types.lastName}
+                      </Typography>
+
+                      <Typography
+                        variant="body1"
+                        gutterBottom
+                        color="textSecondary"
+                        key={types.phoneNumber + i}
+                      >
+                        Phone Number: {types.phoneNumber}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        gutterBottom
+                        color="textSecondary"
+                        key={types.dateOfBirth + i}
+                      >
+                        Date Of Birth: {types.dateOfBirth}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        key={types.role + i}
+                      >
+                        Role: {types.role}
+                      </Typography>
+
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        key={types.email + i}
+                      >
+                        Email: {types.email}
+                      </Typography>
+                    </Grid>
+                  ))}
+              </Paper>
+            </Grid>
             {/* <Grid item xs={12} md={5} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <ChartTwo />
               </Paper>
             </Grid>*/}
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Orders />
               </Paper>
-            </Grid> 
+            </Grid> */}
+          </Grid>
+
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <GridView columns={columns} rows={users} pageSize={5} />
+            </Paper>
           </Grid>
         </Container>
       </Container>
-      
     </div>
   );
 }
