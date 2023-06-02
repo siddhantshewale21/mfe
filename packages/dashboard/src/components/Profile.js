@@ -5,6 +5,7 @@ import ChartTwo from './ChartTwo';
 import Orders from './Orders';
 import DrawerMenu from './DrawerMenu';
 import {useStyles} from "./Styles"
+import UserGrid from './UserGrid';
 import {
   TextField,
   Grid,
@@ -17,6 +18,7 @@ import {
   CardHeader,
   Divider,
 } from "@material-ui/core";
+
 
 
 
@@ -134,15 +136,16 @@ export default function Profile(props) {
           ))}
            </Paper>
         </Grid>
-            {/* <Grid item xs={12} md={5} lg={3}>
+            <Grid item xs={12} md={5} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <ChartTwo />
               </Paper>
-            </Grid>*/}
+            </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Orders />
               </Paper>
+              <UserGrid />
             </Grid> 
           </Grid>
         </Container>
